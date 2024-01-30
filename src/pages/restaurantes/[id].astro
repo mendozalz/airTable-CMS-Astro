@@ -1,0 +1,25 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import type { GetStaticPaths } from "astro";
+import { getRecords } from "../../utils/airtable";
+
+export const getStaticPaths = (async () => {
+  const credits = await getRecords("table");
+
+  return credits.map((x) => ({
+    params: {
+      id: x.fields.id,
+    },
+    props: {
+      Name: x.fields.Name,
+    },
+  }));
+}) satisfies GetStaticPaths;
+
+const { id } = Astro.params;
+const { Name } = Astro.props;
+---
+
+<Layout title={Name} />
+<h1 class="text-white">{Name}</h1>
+<h2 class="text-white">{id}</h2>
